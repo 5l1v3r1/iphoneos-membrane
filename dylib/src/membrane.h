@@ -80,7 +80,7 @@
 - (BOOL)isPasscodeLocked;
 @end
 
-@interface CLLocationManager (Undocumented)
+@interface CLLocationManager : NSObject
 + (void)setLocationServicesEnabled:(BOOL)arg1;
 @end
 
