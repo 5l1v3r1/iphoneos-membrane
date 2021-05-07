@@ -1,6 +1,4 @@
-# membrane (`iOS implant`)
-
-`membrane` is an **iOS** implant that gives an ability to manipulate device **functions**, **data** and **hardware** locally or remotely.
+# iPhoneOS Membrane
 
 * **Supported iOS versions:** `iOS 10/11/12/13/14`
 * **Suported CPUs:** `arm64`, `armv7`
