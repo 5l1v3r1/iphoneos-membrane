@@ -122,14 +122,22 @@ static SpringBoard *__strong sharedInstance;
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:args[1] message:args[2] preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
             [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:nil];
+            [alert show];
 	}
     } else if ([args[0] isEqual:@"setvol"]) {
         if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: setvol [0-100]" forKey:@"returnStatus"];
 	else {
 	    if ([args[1] integerValue] >= 0 && [args[1] integerValue] <= 100) {
-	    	float volumeLevel = [args[1] integerValue]/100;
-	    	[[MPMusicPlayerController systemMusicPlayer] setVolume:volumeLevel];
+                MPVolumeView* volumeView = [[MPVolumeView alloc] init];
+                UISlider* volumeViewSlider = nil;
+                for (UIView* view in [volumeView subviews]) {
+                    if ([view.class.description isEqualToString:@"MPVolumeSlider"]) {
+                        volumeViewSlider = (UISlider*)view;
+                        break;
+                    }
+                }
+                [volumeViewSlider setValue:[args[1] floatValue] animated:NO];
+                [volumeViewSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
 	    } else return [NSDictionary dictionaryWithObject:@"Usage: setvol [0-100]" forKey:@"returnStatus"];
 	}
     } else if ([args[0] isEqual:@"getvol"]) {
