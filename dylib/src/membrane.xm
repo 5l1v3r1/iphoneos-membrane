@@ -28,9 +28,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-#import <UIKit/UIApplication.h>
-#import <UIKit/UIDevice.h>
-
 #import "NSTask.h"
 #import "mediaremote.h"
 
