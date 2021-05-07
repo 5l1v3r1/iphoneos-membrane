@@ -119,10 +119,20 @@ static SpringBoard *__strong sharedInstance;
     } else if ([args[0] isEqual:@"alert"]) {
         if (args_count < 3) return [NSDictionary dictionaryWithObject:@"Usage: alert <title> <message>" forKey:@"returnStatus"];
 	else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:args[1] message:args[2] preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
-            [alert addAction:defaultAction];
-            [alert show];
+            const char* title = [[NSString stringWithFormat:@"%@", args[1]] UTF8String];
+            const char* message = [[NSString stringWithFormat:@"%@", args[2]] UTF8String];
+            extern char* optarg;
+            extern int optind;
+            CFTimeInterval timeout = 0;
+            CFMutableDictionaryRef dict = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+            CFDictionaryAddValue(dict, kCFUserNotificationAlertHeaderKey, CFStringCreateWithCString(NULL, title, kCFStringEncodingUTF8));
+            CFDictionaryAddValue(dict, kCFUserNotificationAlertMessageKey, CFStringCreateWithCString(NULL, message, kCFStringEncodingUTF8));
+            SInt32 error;
+            CFOptionFlags flags = 0;
+            flags |= kCFUserNotificationPlainAlertLevel;
+            CFDictionaryAddValue(dict, kCFUserNotificationAlertTopMostKey, kCFBooleanTrue);
+            CFNotificationCenterPostNotificationWithOptions(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("test"), NULL, NULL, kCFNotificationDeliverImmediately);
+            CFUserNotificationCreate(NULL, timeout, flags, &error, dict);
 	}
     } else if ([args[0] isEqual:@"setvol"]) {
         if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: setvol [0-100]" forKey:@"returnStatus"];
