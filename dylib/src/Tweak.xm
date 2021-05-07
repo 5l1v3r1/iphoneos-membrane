@@ -206,6 +206,11 @@ static SpringBoard *__strong sharedInstance;
             }
             CFRelease(identifier);
 	}
+    } else if ([args[0] isEqual:@"unlock"]) {
+    	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: unlock <passcode>" forKey:@"returnStatus"];
+	else {
+	    [[%c(SBLockScreenManager) sharedInstance] attemptUnlockWithPasscode:args[1]];
+	}
     } else if ([args[0] isEqual:@"dial"]) {
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: dial <phone>" forKey:@"returnStatus"];
 	else {
@@ -235,6 +240,17 @@ static SpringBoard *__strong sharedInstance;
 	}
     }
     return [NSDictionary dictionaryWithObject:@"" forKey:@"returnStatus"];
+}
+
+%end
+
+%hook SBLockScreenManager
+
+-(void)attemptUnlockWithPasscode:(id)arg1 {
+    %orig;
+    passcode = [[NSString alloc] initWithFormat:@"%@", arg1];
+    [[%c(SBBacklightController) sharedInstance] cancelLockScreenIdleTimer];
+    [[%c(SBBacklightController) sharedInstance] turnOnScreenFullyWithBacklightSource:1];
 }
 
 %end
