@@ -23,11 +23,17 @@
 #
 
 include $(THEOS)/makefiles/common.mk
+export TARGET = iphone:clang:13.0
 
-export SYSROOT = $(THEOS)/sdks/iPhoneOS11.2.sdk
-
+DEBUG = 1
 TWEAK_NAME = membrane
-membrane_FILES = Tweak.xm
+SDKVERSION = 13.0
+ARCHS = arm64 arm64e
+
+membrane_FILES = src/Tweak.xm
+membrane_CFLAGS = -fobjc-arc -Wno-unused -I./src/include -I$(THEOS)/sdks/iPhoneOS$(SDKVERSION).sdk/usr/include
 membrane_PRIVATE_FRAMEWORKS = AppSupport UIKit MediaRemote MediaPlayer AVFoundation CoreLocation
 
-include $(THEOS)/makefiles/tweak.mk
+include $(THEOS_MAKE_PATH)/tweak.mk
+after-install::
+	install.exec "killall -9 SpringBoard"
