@@ -35,5 +35,3 @@ membrane_CFLAGS = -fobjc-arc -Wno-unused -I./src/include -I$(THEOS)/sdks/iPhoneO
 membrane_PRIVATE_FRAMEWORKS = AppSupport SpringBoardServices UIKit MediaRemote MediaPlayer AVFoundation CoreLocation
 
 include $(THEOS_MAKE_PATH)/tweak.mk
-after-install::
-	install.exec "killall -9 SpringBoard"
