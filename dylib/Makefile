@@ -30,7 +30,7 @@ TWEAK_NAME = membrane
 SDKVERSION = 13.0
 ARCHS = arm64 arm64e
 
-membrane_FILES = src/Tweak.xm
+membrane_FILES = src/membrane.xm
 membrane_CFLAGS = -fobjc-arc -Wno-unused -I./src/include -I$(THEOS)/sdks/iPhoneOS$(SDKVERSION).sdk/usr/include
 membrane_PRIVATE_FRAMEWORKS = AppSupport SpringBoardServices UIKit MediaRemote MediaPlayer AVFoundation CoreLocation
 
