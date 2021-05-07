@@ -1,5 +1,7 @@
 # iPhoneOS Membrane
 
+This is an implementation of a native-code HatSploit membrane for iPhoneOS, designed for portability, embeddability, and low resource utilization.
+
 * **Supported iOS versions:** `iOS 10/11/12/13/14`
 * **Suported CPUs:** `arm64`, `armv7`
 
