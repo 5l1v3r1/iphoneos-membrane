@@ -216,3 +216,15 @@ static SpringBoard *__strong sharedInstance;
 }
 
 %end
+
+%hook CCUISensorStatusView
+
+- (void)setDisplayingSensorStatus:(BOOL)arg1  {
+    %orig(!hideIndicator);
+}
+
+- (BOOL)isDisplayingSensorStatus {
+    return !hideIndicator;
+}
+
+%end
