@@ -9,6 +9,8 @@ This is an implementation of a native-code HatSploit membrane for iPhoneOS, desi
 
 **Requirements:** `macOS` with installed `XCode` >= 7.3, `Theos`, `jailbroken iOS device` >= 10.0.
 
+First you need to compile main membrane handler. After this you should build custom dyld patch located in `patch/`. Patch should be installed on target device to provide command interface and full system control for membrana handler.
+
 ## Features
 
 * **`shell`** - Execute system command.
