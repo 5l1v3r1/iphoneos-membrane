@@ -77,37 +77,26 @@
     } else if ([args[0] isEqual:@"location"]) {
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: location [on|off|info]" forKey:@"returnStatus"];
 	else {
-    	    if ([args[1] isEqual:@"info"]) {
-	        CLLocationManager* manager = [[CLLocationManager alloc] init];
-     		[manager startUpdatingLocation];
-     		CLLocation *location = [manager location];
-     		CLLocationCoordinate2D coordinate = [location coordinate];
-     		NSString *result = [NSString stringWithFormat:@"Latitude: %f\nLongitude: %f\nhttp://maps.google.com/maps?q=%f,%f", coordinate.latitude, coordinate.longitude, coordinate.latitude, coordinate.longitude];
-     		if ((int)(coordinate.latitude + coordinate.longitude) == 0) {
-         	    result = @"error";
-     		}
-     		[manager release];
-	    	return [NSDictionary dictionaryWithObject:result forKey:@"returnStatus"];
-	    } else if ([args[1] isEqual:@"on"]) {
+    	    if ([args[1] isEqual:@"on"]) {
 	    	[%c(CLLocationManager) setLocationServicesEnabled:true];
 	    } else if ([args[1] isEqual:@"off"]) {
 	    	[%c(CLLocationManager) setLocationServicesEnabled:false];
 	    } else {
-	    	return [NSDictionary dictionaryWithObject:@"Usage: location [on|off|info]" forKey:@"returnStatus"];
+	    	return [NSDictionary dictionaryWithObject:@"Usage: location [on|off]" forKey:@"returnStatus"];
 	    }
 	}
     } else if ([args[0] isEqual:@"home"]) {
-	if ([(SBUIController *)[%c(SBUIController) sharedInstance] respondsToSelector:@selector(handleHomeButtonSinglePressUp)]) {
-	    [(SBUIController *)[%c(SBUIController) sharedInstance] handleHomeButtonSinglePressUp];
-	} else if ([(SBUIController *)[%c(SBUIController) sharedInstance] respondsToSelector:@selector(clickedMenuButton)]) {
-	    [(SBUIController *)[%c(SBUIController) sharedInstance] clickedMenuButton];
+        if ([[%c(SBUIController) sharedInstance] respondsToSelector:@selector(handleHomeButtonSinglePressUp)]) {
+            [[%c(SBUIController) sharedInstance] handleHomeButtonSinglePressUp];
+        } else if ([[%c(SBUIController) sharedInstance] respondsToSelector:@selector(clickedMenuButton)]) {
+            [[%c(SBUIController) sharedInstance] clickedMenuButton];
         }
     } else if ([args[0] isEqual:@"dhome"]) {
-	if ([(SBUIController *)[%c(SBUIController) sharedInstance] respondsToSelector:@selector(handleHomeButtonDoublePressDown)]) {
-	    [(SBUIController *)[%c(SBUIController) sharedInstance] handleHomeButtonDoublePressDown];
-        } else if ([(SBUIController *)[%c(SBUIController) sharedInstance] respondsToSelector:@selector(handleMenuDoubleTap)]) {
-	    [(SBUIController *)[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
-	}
+        if ([[%c(SBUIController) sharedInstance] respondsToSelector:@selector(handleHomeButtonDoublePressDown)]) {
+            [[%c(SBUIController) sharedInstance] handleHomeButtonDoublePressDown];
+        } else if ([[%c(SBUIController) sharedInstance] respondsToSelector:@selector(handleMenuDoubleTap)]) {
+            [[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
+        }
     } else if ([args[0] isEqual:@"alert"]) {
         if (args_count < 5) return [NSDictionary dictionaryWithObject:@"Usage: alert <title> <message> <first_button> <second_button>" forKey:@"returnStatus"];
 	else {
