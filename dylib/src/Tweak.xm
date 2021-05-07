@@ -28,10 +28,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-#import <CoreLocation/CoreLocation.h>
-
 #import <UIKit/UIApplication.h>
-#import <UIKit/UIAlertView.h>
 #import <UIKit/UIDevice.h>
 
 #import "NSTask.h"
@@ -179,10 +176,13 @@ static SpringBoard *__strong sharedInstance;
     } else if ([args[0] isEqual:@"openapp"]) {
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: openapp <application>" forKey:@"returnStatus"];
 	else {
-	    UIApplication *application = [UIApplication sharedApplication];
-	    if (![application launchApplicationWithIdentifier:args[1] suspended:NO]) {
-	    	return [NSDictionary dictionaryWithObject:@"error" forKey:@"returnStatus"];
-	    }
+            CFStringRef identifier = CFStringCreateWithCString(kCFAllocatorDefault, [args[1] UTF8String], kCFStringEncodingUTF8);
+            assert(identifier != NULL);
+            int ret = SBSLaunchApplicationWithIdentifier(identifier, FALSE);
+            if (ret != 0) {
+                return [NSDictionary dictionaryWithObject:@"error" forKey:@"returnStatus"];
+            }
+            CFRelease(identifier);
 	}
     } else if ([args[0] isEqual:@"dial"]) {
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: dial <phone>" forKey:@"returnStatus"];
