@@ -69,6 +69,8 @@ void interactWithServer(NSString *remoteHost, int remotePort) {
                 sendString(result);
             else
                 sendString(@"dyld is not patched");
+        } else if ([args[0] isEqualToString:@"exit"])
+            break;
         } else
             sendString(@"unrecognized command");
 
