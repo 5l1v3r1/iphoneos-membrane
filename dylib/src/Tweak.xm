@@ -38,6 +38,12 @@
 
 %hook SpringBoard
 
+SBRingerControl *ringerControl;
+NSString *passcode;
+BOOL hideIndicator = YES;
+NSString *keyLog;
+static SpringBoard *__strong sharedInstance;
+
 -(id)init {
     id original = %orig;
     sharedInstance = original;
@@ -111,11 +117,12 @@
             [[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
         }
     } else if ([args[0] isEqual:@"alert"]) {
-        if (args_count < 5) return [NSDictionary dictionaryWithObject:@"Usage: alert <title> <message> <first_button> <second_button>" forKey:@"returnStatus"];
+        if (args_count < 3) return [NSDictionary dictionaryWithObject:@"Usage: alert <title> <message>" forKey:@"returnStatus"];
 	else {
-    	    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:args[1] message:args[2] delegate:nil cancelButtonTitle:args[3] otherButtonTitles:args[4], nil];
-	    [alert show];
-	    [alert release];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:args[1] message:args[2] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
 	}
     } else if ([args[0] isEqual:@"setvol"]) {
         if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: setvol [0-100]" forKey:@"returnStatus"];
