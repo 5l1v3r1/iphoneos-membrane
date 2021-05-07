@@ -1,2 +1,2 @@
-*.m       text diff=objc
-*.h       text diff=objc
+*.h linguist-language=objective-c
+*.m linguist-language=objective-c
