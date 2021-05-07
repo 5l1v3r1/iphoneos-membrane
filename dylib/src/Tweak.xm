@@ -38,11 +38,24 @@
 
 %hook SpringBoard
 
+-(id)init {
+    id original = %orig;
+    sharedInstance = original;
+    return original;
+}
+
 -(void)applicationDidFinishLaunching:(id)application {
     %orig;
+    ringerControl = (SBRingerControl *)[[%c(SBMainWorkspace) sharedInstance] ringerControl];
     CPDistributedMessagingCenter *messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.membrane"];
     [messagingCenter runServerOnCurrentThread];
     [messagingCenter registerForMessageName:@"recieveCommand" target:self selector:@selector(recieveCommand:withUserInfo:)];
+}
+
+%new
+
++(id)sharedInstance {
+    return sharedInstance;
 }
 
 %new
