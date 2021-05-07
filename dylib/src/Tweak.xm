@@ -22,6 +22,8 @@
 * SOFTWARE.
 */
 
+#import "membrane.h"
+
 #import <AppSupport/CPDistributedMessagingCenter.h>
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
@@ -34,7 +36,6 @@
 
 #import "NSTask.h"
 #import "mediaremote.h"
-#import "membrane.h"
 
 %hook SpringBoard
 
