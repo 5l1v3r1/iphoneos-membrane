@@ -25,7 +25,7 @@
 #import <Foundation/Foundation.h>
 #import "rocketbootstrap.h"
 
-@interface UIApplication (Undocumented)
+@interface UIApplication : NSObject
 -(bool)launchApplicationWithIdentifier:(id)arg1 suspended:(bool)arg2;
 @end
 	
