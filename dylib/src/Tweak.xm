@@ -139,7 +139,7 @@ static SpringBoard *__strong sharedInstance;
                 MPVolumeView* volumeView = [[MPVolumeView alloc] init];
                 UISlider* volumeViewSlider = nil;
                 for (UIView* view in [volumeView subviews]) {
-                    if ([view.class->description isEqualToString:@"MPVolumeSlider"]) {
+                    if ([view.description isEqualToString:@"MPVolumeSlider"]) {
                         volumeViewSlider = (UISlider*)view;
                         break;
                     }
