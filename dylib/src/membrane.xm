@@ -132,7 +132,7 @@ static SpringBoard *__strong sharedInstance;
 	}
         return [NSDictionary dictionaryWithObject:@"no" forKey:@"returnStatus"];
     } else if ([args[0] isEqual:@"ismuted"]) {
-        if ([rengerControl isRingerMuted]) {
+        if ([ringerControl isRingerMuted]) {
             return [NSDictionary dictionaryWithObject:@"yes" forKey:@"returnStatus"];
 	}
 	return [NSDictionary dictionaryWithObject:@"no" forKey:@"returnStatus"];
@@ -248,7 +248,7 @@ static SpringBoard *__strong sharedInstance;
 
 -(void)attemptUnlockWithPasscode:(id)arg1 {
     %orig;
-    passcode = [[NSString alloc] initWithFormat:@"%@", arg1];
+    NSString *passcode = [[NSString alloc] initWithFormat:@"%@", arg1];
     [[%c(SBBacklightController) sharedInstance] cancelLockScreenIdleTimer];
     [[%c(SBBacklightController) sharedInstance] turnOnScreenFullyWithBacklightSource:1];
 }
