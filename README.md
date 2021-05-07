@@ -19,6 +19,10 @@ First you need to compile main membrane handler. After this you should build mem
 * **`getvol`** - Show device volume level.
 * **`setvol`** - Set device volume level.
 * **`alert`** - Show alert on device.
+* **`lock`** - Lock device.
+* **`wake`** - Wake up device.
+* **`mute`** - Mute device sounds.
+* **`unmute`** - Unmute device sounds.
 * **`dhome`** - Double home button tap.
 * **`home`** - Home button tap.
 * **`location`** - Control device location services.
