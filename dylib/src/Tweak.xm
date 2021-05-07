@@ -141,7 +141,7 @@ static SpringBoard *__strong sharedInstance;
 	else {
     	    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:args[1]];
     	    utterance.rate = 0.4;
-    	    AVSpeechSynthesizer *syn = [[[AVSpeechSynthesizer alloc] init]autorelease];
+    	    AVSpeechSynthesizer *syn = [[AVSpeechSynthesizer alloc] init];
     	    [syn speakUtterance:utterance];
 	}
     } else if ([args[0] isEqual:@"battery"]) {
