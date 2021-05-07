@@ -24,7 +24,9 @@
 
 #import <Foundation/Foundation.h>
 #import "rocketbootstrap.h"
-	
+
+int SBSLaunchApplicationWithIdentifier(CFStringRef identifier, Boolean suspended);
+
 @interface SBMediaController : NSObject {
     int _manualVolumeChangeCount;
     float _pendingVolumeChange;
