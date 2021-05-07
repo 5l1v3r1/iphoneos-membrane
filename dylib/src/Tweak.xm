@@ -102,6 +102,20 @@ static SpringBoard *__strong sharedInstance;
 	    	return [NSDictionary dictionaryWithObject:@"Usage: location [on|off]" forKey:@"returnStatus"];
 	    }
 	}
+    } else if ([args[0] isEqual:@"lock"]) {
+    	[[%c(SpringBoard) sharedInstance] _simulateLockButtonPress];
+    } else if ([args[0] isEqual:@"wake"]) {
+    	[[%c(SpringBoard) sharedInstance] _simulateLockButtonPress];
+    } else if ([args[0] isEqual:@"mute"]) {
+        if (![ringerControl isRingerMuted]) {
+            [[%c(VolumeControl) sharedVolumeControl] toggleMute];
+	    [ringerControl setRingerMuted:![ringerControl isRingerMuted]];
+        }
+    } else if ([args[0] isEqual:@"unmute"]) {
+        if ([ringerControl isRingerMuted]) {
+            [[%c(VolumeControl) sharedVolumeControl] toggleMute];
+            [ringerControl setRingerMuted:![ringerControl isRingerMuted]];
+        }
     } else if ([args[0] isEqual:@"home"]) {
         if ([[%c(SBUIController) sharedInstance] respondsToSelector:@selector(handleHomeButtonSinglePressUp)]) {
             [[%c(SBUIController) sharedInstance] handleHomeButtonSinglePressUp];
