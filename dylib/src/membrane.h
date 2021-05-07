@@ -22,6 +22,7 @@
 * SOFTWARE.
 */
 
+#import <Foundation/Foundation.h>
 #import "rocketbootstrap.h"
 
 @interface UIApplication (Undocumented)
