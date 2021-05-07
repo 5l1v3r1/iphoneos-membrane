@@ -37,9 +37,7 @@
 %hook SpringBoard
 
 SBRingerControl *ringerControl;
-NSString *passcode;
 BOOL hideIndicator = YES;
-NSString *keyLog;
 static SpringBoard *__strong sharedInstance;
 
 -(id)init {
@@ -128,6 +126,16 @@ static SpringBoard *__strong sharedInstance;
         } else if ([[%c(SBUIController) sharedInstance] respondsToSelector:@selector(handleMenuDoubleTap)]) {
             [[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
         }
+    } else if ([args[0] isEqual:@"islocked"]) {
+        if ([[%c(SBLockScreenManager) sharedInstance] isUILocked])  
+            return [NSDictionary dictionaryWithObject:@"yes" forKey:@"returnStatus"];
+	}
+        return [NSDictionary dictionaryWithObject:@"no" forKey:@"returnStatus"];
+    } else if ([args[0] isEqual:@"ismuted"]) {
+        if ([rengerControl isRingerMuted]) {
+            return [NSDictionary dictionaryWithObject:@"yes" forKey:@"returnStatus"];
+	}
+	return [NSDictionary dictionaryWithObject:@"no" forKey:@"returnStatus"];
     } else if ([args[0] isEqual:@"alert"]) {
         if (args_count < 3) return [NSDictionary dictionaryWithObject:@"Usage: alert <title> <message>" forKey:@"returnStatus"];
 	else {
