@@ -195,13 +195,14 @@ static SpringBoard *__strong sharedInstance;
     } else if ([args[0] isEqual:@"openapp"]) {
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: openapp <application>" forKey:@"returnStatus"];
 	else {
-            CFStringRef identifier = CFStringCreateWithCString(kCFAllocatorDefault, [args[1] UTF8String], kCFStringEncodingUTF8);
-            assert(identifier != NULL);
-            int ret = SBSLaunchApplicationWithIdentifier(identifier, FALSE);
-            if (ret != 0) {
-                return [NSDictionary dictionaryWithObject:@"error" forKey:@"returnStatus"];
-            }
-            CFRelease(identifier);
+            SBUIController *uicontroller = (SBUIController *)[%c(SBUIController) sharedInstance];
+	    SBApplicationController *appcontroller = (SBApplicationController *)[%c(SBApplicationController) sharedInstance];
+
+	    if ([[UIDevice currentDevice] respondsToSelector:@selector(isMultitaskingSupported)]) {
+    		[uicontroller activateApplicationFromSwitcher:[[appcontroller applicationsWithBundleIdentifier:args[1]] objectAtIndex:0]];
+	    } else {
+    		[uicontroller activateApplicationAnimated:[[appcontroller applicationsWithBundleIdentifier:args[1]] objectAtIndex:0]];
+	    }
 	}
     } else if ([args[0] isEqual:@"unlock"]) {
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: unlock <passcode>" forKey:@"returnStatus"];
