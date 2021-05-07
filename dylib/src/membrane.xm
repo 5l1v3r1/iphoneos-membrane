@@ -127,7 +127,7 @@ static SpringBoard *__strong sharedInstance;
             [[%c(SBUIController) sharedInstance] handleMenuDoubleTap];
         }
     } else if ([args[0] isEqual:@"islocked"]) {
-        if ([[%c(SBLockScreenManager) sharedInstance] isUILocked])  
+        if ([[%c(SBLockScreenManager) sharedInstance] isUILocked]) {
             return [NSDictionary dictionaryWithObject:@"yes" forKey:@"returnStatus"];
 	}
         return [NSDictionary dictionaryWithObject:@"no" forKey:@"returnStatus"];
