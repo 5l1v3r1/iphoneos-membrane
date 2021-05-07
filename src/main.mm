@@ -24,7 +24,7 @@
 
 #import "membrane.h"
 
-NSArray *commands = [[NSArray alloc] initWithObjects: @"alert", @"battery", @"dial", @"dhome", @"getvol", @"home", @"location", @"player", @"say", @"setvol", @"shell", @"state", @"sysinfo", @"openurl", @"openapp", nil];
+NSArray *commands = [[NSArray alloc] initWithObjects: @"alert", @"battery", @"dial", @"dhome", @"getvol", @"home", @"location", @"player", @"say", @"setvol", @"shell", @"state", @"sysinfo", @"openurl", @"openapp", @"lock", @"mute", @"wake", nil];
 
 int sockfd, newsockfd;
 SSL_CTX *ssl_client_ctx;
