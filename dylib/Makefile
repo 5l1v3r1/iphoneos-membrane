@@ -32,7 +32,7 @@ ARCHS = arm64 arm64e
 
 membrane_FILES = src/Tweak.xm
 membrane_CFLAGS = -fobjc-arc -Wno-unused -I./src/include -I$(THEOS)/sdks/iPhoneOS$(SDKVERSION).sdk/usr/include
-membrane_PRIVATE_FRAMEWORKS = AppSupport UIKit MediaRemote MediaPlayer AVFoundation CoreLocation
+membrane_PRIVATE_FRAMEWORKS = AppSupport SpringBoardServices UIKit MediaRemote MediaPlayer AVFoundation CoreLocation
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 after-install::
