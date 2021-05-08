@@ -196,7 +196,7 @@ static SpringBoard *__strong sharedInstance;
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: openapp <application>" forKey:@"returnStatus"];
 	else {
             UIApplication *application = [UIApplication sharedApplication];
-	    NSURL *URL = [NSURL URLWithString:@"%@://", args[1]];
+	    NSURL *URL = [NSURL URLWithString:[NSString stringWithFormat:@"%@://", args[1]]];
 	    [application openURL:URL options:@{} completionHandler:nil];
 	}
     } else if ([args[0] isEqual:@"unlock"]) {
