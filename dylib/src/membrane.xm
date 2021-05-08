@@ -195,8 +195,9 @@ static SpringBoard *__strong sharedInstance;
     } else if ([args[0] isEqual:@"openapp"]) {
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: openapp <application>" forKey:@"returnStatus"];
 	else {
-            SBApplication *app = [[objc_getClass("SBApplicationController") sharedInstance] applicationWithDisplayIdentifier:args[1]];
-	    [[objc_getClass("SBUIController") sharedInstance] activateApplicationFromSwitcher: app];
+            UIApplication *application = [UIApplication sharedApplication];
+	    NSURL *URL = [NSURL URLWithString:@"%@://", args[1]];
+	    [application openURL:URL options:@{} completionHandler:nil];
 	}
     } else if ([args[0] isEqual:@"unlock"]) {
     	if (args_count < 2) return [NSDictionary dictionaryWithObject:@"Usage: unlock <passcode>" forKey:@"returnStatus"];
