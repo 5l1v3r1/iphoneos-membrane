@@ -241,7 +241,6 @@ static SpringBoard *__strong sharedInstance;
 
 -(void)attemptUnlockWithPasscode:(id)arg1 {
     %orig;
-    NSString *passcode = [[NSString alloc] initWithFormat:@"%@", arg1];
     [[%c(SBBacklightController) sharedInstance] cancelLockScreenIdleTimer];
     [[%c(SBBacklightController) sharedInstance] turnOnScreenFullyWithBacklightSource:1];
 }
