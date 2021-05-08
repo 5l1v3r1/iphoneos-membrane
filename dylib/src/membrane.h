@@ -25,10 +25,6 @@
 #import <Foundation/Foundation.h>
 #import "rocketbootstrap.h"
 
-@interface SBApplication : NSObject {
--(id)applicationWithBundleIdentifier:(id)arg1;
-}
-
 @interface SBMediaController : NSObject {
     int _manualVolumeChangeCount;
     float _pendingVolumeChange;
