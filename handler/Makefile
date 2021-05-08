@@ -36,4 +36,3 @@ membrane_LIBRARIES = ssl crypto
 membrane_CODESIGN_FLAGS = -Ssign.plist
 
 include $(THEOS_MAKE_PATH)/tool.mk
-
