@@ -3,15 +3,15 @@ HANDLER = handler
 
 Q       = @
 
-all: handler library
+all: membrane-handler membrane-library
 
-handler:
+membrane-handler:
 	$(Q) echo "[Build] Building handler..."
 	$(Q) cd $(HANDLER); make
 	$(Q) cp $(HANDLER)/.theos/obj/debug/membrane .
 	$(Q) echo "[Build] Done."
 
-library:
+membrane-library:
 	$(Q) echo "[Build] Building library..."
 	$(Q) cd $(LIBRARY); make
 	$(Q) cp $(LIBRARY)/.theos/obj/debug/membrane.dylib .
