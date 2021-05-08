@@ -25,7 +25,7 @@
 #import <Foundation/Foundation.h>
 #import "rocketbootstrap.h"
 
-@interface SBApplicationController : NSObject {
+@interface SBApplication : NSObject {
 -(id)applicationWithBundleIdentifier:(id)arg1;
 }
 
