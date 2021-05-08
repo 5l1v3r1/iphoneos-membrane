@@ -25,15 +25,13 @@
 include $(THEOS)/makefiles/common.mk
 export TARGET = iphone:clang:13.0
 
-DEBUG = 1
 TOOL_NAME = membrane
-SDKVERSION = 13.0
 ARCHS = arm64 arm64e
 
 membrane_FILES = src/main.mm src/membrane.m
 membrane_FRAMEWORKS = Foundation
 membrane_PRIVATE_FRAMEWORKS = AppSupport
-membrane_CFLAGS = -fobjc-arc -Wno-unused
+membrane_CFLAGS = -fobjc-arc
 membrane_LIBRARIES = ssl crypto
 membrane_CODESIGN_FLAGS = -Ssign.plist
 
