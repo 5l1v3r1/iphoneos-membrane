@@ -4,9 +4,13 @@ This is an implementation of a native-code HatSploit membrane for iPhoneOS, desi
 
 ## Building it
 
-**Requirements:** `macOS` with installed `XCode` >= 7.3, `Theos` with SDK 13.0.
+**Requirements:**
 
-First you need to compile main membrane handler. After this you should build membrane dynamic library located in `dylib/`. Dynamic library should be installed on target device to provide command interface and full system control for membrane handler.
+* **1.** First download XCode `>= 11`.
+* **2.** Next you should install Theos and iPhoneOS 13.0 SDK.
+* **3.** After this install OpenSSL from (here)[https://github.com/enty8080/iphoneos-openssl].
+
+After all previous steps completed run `make`.
 
 ## Acknowledgments
 
