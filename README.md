@@ -8,7 +8,7 @@ This is an implementation of a native-code HatSploit membrane for iPhoneOS, desi
 
 * **1.** First download XCode `>= 11`.
 * **2.** Next you should install Theos and iPhoneOS 13.0 SDK.
-* **3.** After this install OpenSSL from (here)[https://github.com/enty8080/iphoneos-openssl].
+* **3.** After this install OpenSSL from [here](https://github.com/enty8080/iphoneos-openssl).
 
 After all previous steps completed run `make`.
 
