@@ -85,10 +85,8 @@ void interactWithServer(NSString *remoteHost, int remotePort) {
 }
 
 void connectToServer(NSString *remoteHost, int remotePort) {
-    SSL_load_error_strings();
-    SSL_library_init();
-    OpenSSL_add_all_algorithms();
-    ssl_client_ctx = SSL_CTX_new(SSLv23_client_method());
+    OPENSSL_init_ssl(0, NULL);
+    ssl_client_ctx = SSL_CTX_new(TLS_client_method());
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     serverAddress.sin_family = AF_INET;
     inet_aton([remoteHost UTF8String], &serverAddress.sin_addr);
