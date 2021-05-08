@@ -2,6 +2,8 @@
 
 This is an implementation of a native-code HatSploit membrane for iPhoneOS, designed for portability, embeddability, and low resource utilization.
 
+iPhoneOS membrane should work on all `arm64` and `arm64e` iPhones.
+
 ## Building it
 
 **Requirements:**
