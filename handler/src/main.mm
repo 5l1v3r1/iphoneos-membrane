@@ -40,7 +40,6 @@ void connectToServer(NSString *remote_host, int remote_port);
 
 int main(int argc, const char *argv[]) {
     @autoreleasepool {
-        membrane *membrane_base = [[membrane alloc] init];
         if (argc < 3)
             return -1;
         else {
